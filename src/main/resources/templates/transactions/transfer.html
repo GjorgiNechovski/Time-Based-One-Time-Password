@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/styles/transaction.css}" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <form class="main-part text-center" method="post" action="/transfer">
+        <p class="bg-danger text-light p-2 py-4 " th:if="${error!=null}" th:text="${error}"></p>
+        <label>Person's transaction number: </label>
+        <input class="form-control" type="number" name="transferNumber" required><br>
+        <label>Transfer Amount:</label>
+        <input class="form-control"  type="number" name="amount" required><br>
+        <button class="button" type="submit" role="button">Transfer</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/styles/transaction.css}" rel="stylesheet" />
+
+</head>
+<body>
+<div class="container">
+    <div class="main-part text-center">
+        <p>Your transaction number: <span th:text="${user.getTransactionNumber()}"></span></p>
+        <p>Your balance: <span th:text="${user.getBalance()}"></span></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+    <link th:href="@{/styles/transaction-list.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <div class="transaction-group text-center ">
+        <p>Transactions you have sent:</p>
+        <div class="transaction-list" th:if="${sentTransactions.size() > 0}" th:each="transaction : ${sentTransactions}">
+            <div style="width: 95%; display: inline-block">
+                <span>Sent to: </span><span th:text="${transaction.getToUser().getTransactionNumber()}"></span><br>
+                <span>Amount: <span th:text="${transaction.getAmount()}"></span></span><br>
+                <span>Type of transaction: <span th:text="${transaction.getTransactionType().name()}"></span></span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'COMPLETED'}"
+                style="display: inline-block; background-color: green; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'PENDING'}"
+                 style="display: inline-block; background-color: yellow; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'FAILED'}"
+                 style="display: inline-block; background-color: red; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+        </div>
+
+
+        <span th:if="${sentTransactions.size() == 0}">You have not sent any transactions</span>
+    </div>
+    <div class="transaction-group text-center">
+        <p>Transactions you have received: </p>
+        <div class="transaction-list" th:if="${receivedTransactions.size() > 0}" th:each="transaction : ${receivedTransactions}">
+            <div style="width: 95%; display: inline-block">
+                <span>Sent by: </span><span th:text="${transaction.getFromUser().getTransactionNumber()}"></span><br>
+                <span>Amount: <span th:text="${transaction.getAmount()}"></span></span><br>
+                <span>Type of transaction: <span th:text="${transaction.getTransactionType().name()}"></span></span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'COMPLETED'}"
+                 style="display: inline-block; background-color: green; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'PENDING'}"
+                 style="display: inline-block; background-color: yellow; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+            <div th:if="${transaction.getStatus().name() == 'FAILED'}"
+                 style="display: inline-block; background-color: red; width: 5%; float: right">
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+                <span style="opacity: 0">filler</span>
+            </div>
+        </div>
+        <span th:if="${receivedTransactions.size() == 0}">You have not received any transactions</span>
+    </div>
+</div>
+
+</body>
+</html>

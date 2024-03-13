@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/styles/transaction.css}" rel="stylesheet" />
+
+</head>
+<body>
+<div class="container">
+    <form class="main-part text-center" method="post" action="/withdraw">
+        <p class="bg-danger text-light p-2 py-4 " th:if="${error!=null}" th:text="${error}"></p>
+        <label>Insert the transaction number of the person withdrawing:</label>
+        <input class="form-control"  name="transactionNumber" type="text" required><br>
+        <label>Insert the amount of withdrawing: </label>
+        <input class="form-control"  name="amount" type="number" required><br>
+        <button class="button" type="submit" role="button">Transfer</button>
+    </form>
+</div>
+</body>
+</html>
