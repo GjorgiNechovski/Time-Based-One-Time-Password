@@ -1,0 +1,8 @@
+FROM mysql:latest
+
+ENV MYSQL_DATABASE=springdb
+ENV MYSQL_USER=springuser
+ENV MYSQL_PASSWORD=springpassword
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+
+EXPOSE 3306
