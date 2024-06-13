@@ -1,15 +1,16 @@
 version: '3.8'
 
 services:
-  mysql:
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql
-    restart: always
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: totp
+      POSTGRES_PASSWORD: totp
+      POSTGRES_DB: totp
     volumes:
-      - mysql_data:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
     ports:
-      - "3306:3306"
+      - "5432:5432"
     networks:
       - spring_network
 
@@ -18,11 +19,13 @@ services:
       context: .
       dockerfile: Dockerfile.spring
     depends_on:
-      - mysql
+      - postgres  
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springdb
-      SPRING_DATASOURCE_USERNAME: springuser
-      SPRING_DATASOURCE_PASSWORD: springpassword
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/totp
+      - SPRING_DATASOURCE_USERNAME=totp
+      - SPRING_DATASOURCE_PASSWORD=totp
+      - SPRING_EMAIL_USERNAME=populargjorgi@gmail.com
+      - SPRING_EMAIL_PASSWORD=jhmy tayr lrqz wdao
     ports:
       - "8080:8080"
       - "443:443"
@@ -33,4 +36,4 @@ networks:
   spring_network:
 
 volumes:
-  mysql_data:
+  db-data:
