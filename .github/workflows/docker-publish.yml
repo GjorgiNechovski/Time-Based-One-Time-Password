@@ -1,28 +1,27 @@
-name: Docker
+name: Docker Build And Push To Docker Hub
 
 on:
   push:
-    branches: [ "main" ]
-
-env:
-  REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build Spring Boot
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-
     steps:
-      - uses: actions/checkout@v1.0
-        name: Check out code
-    
-      - uses: mr-smithers-excellent/docker-build-push@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        id: buildAndPushImage
+        uses: MaximilianoBz/dockerhub-buildpush@v1.0
         with:
-          image: ${{ secrets.DOCKER_USERNAME }}/spring-app
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry_url: 'docker.io'
+          repository_name: 'spring-app'
+          user_name: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          image_version: 'v1.0'
+          docker_file: '.'
+      - name: Get pre step result output image_pull_url
+        run: echo "The time was ${{ steps.buildAndPushImage.outputs.image_pull_url }}"
