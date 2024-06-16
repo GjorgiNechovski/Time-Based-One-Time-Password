@@ -2,7 +2,7 @@ name: Docker
 
 on:
   push:
-    branches: [ "main", "temp" ]
+    branches: [ "main" ]
 
 env:
   REGISTRY: docker.io
@@ -34,4 +34,4 @@ jobs:
         with:
           context: ./demo
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest
