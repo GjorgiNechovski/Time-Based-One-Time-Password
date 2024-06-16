@@ -19,7 +19,7 @@ jobs:
         with:
           args: --docker
         env:
-          USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
           TAG_NAME: "latest"
           BUILDX: "true"
