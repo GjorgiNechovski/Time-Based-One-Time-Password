@@ -17,7 +17,7 @@ services:
   spring-app:
     build:
       context: .
-      dockerfile: Dockerfile.spring
+      dockerfile: Dockerfile
     depends_on:
       - postgres  
     environment:
