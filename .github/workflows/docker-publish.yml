@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/demo
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
 
 jobs:
   build-and-deploy:
@@ -32,6 +32,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./demo
+          context: ./
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app:latest
