@@ -21,5 +21,6 @@ jobs:
         env:
           USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/spring-app
           TAG_NAME: "latest"
           BUILDX: "true"
