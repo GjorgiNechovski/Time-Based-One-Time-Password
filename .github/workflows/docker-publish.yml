@@ -2,7 +2,7 @@ name: CI_RO
 
 on: # trigger event
   push: # event push
-    branches: [master]
+    branches: [main]
 
 jobs:
   example: # name of job
