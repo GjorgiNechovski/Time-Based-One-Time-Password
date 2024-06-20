@@ -26,6 +26,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=totp
       - SPRING_EMAIL_USERNAME=populargjorgi@gmail.com
       - SPRING_EMAIL_PASSWORD=jhmy tayr lrqz wdao
+      - SPRING_PROFILES_ACTIVE=gjorgi
     ports:
       - "8080:8080"
       - "443:443"
