@@ -1,6 +1,7 @@
 package ib.finki.ukim.totp.services.implementation.global;
 
 import ib.finki.ukim.totp.services.interfaces.global.IEmailService;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.internet.MimeMessage;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,19 @@ public class EmailService implements IEmailService {
 
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
+    }
+
+    @Value("${spring.mail.username}")
+    private String emailUsername;
+
+    @Value("${spring.mail.password}")
+    private String emailPassword;
+
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Email Username: " + emailUsername);
+        System.out.println("Email Password: " + emailPassword);
     }
 
     @SneakyThrows
