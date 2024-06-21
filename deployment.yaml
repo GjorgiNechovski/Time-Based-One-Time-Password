@@ -1,0 +1,170 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: totp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-config
+  namespace: totp
+data:
+  SPRING_EMAIL_USERNAME: populargjorgi@gmail.com
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: spring-secret
+  namespace: totp
+type: Opaque
+data:
+  SPRING_EMAIL_PASSWORD: amhteSB0YXlyIGxycXogd2Rhbw==
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: totp
+type: Opaque
+data:
+  postgres-username: dG90cA==
+  postgres-password: dG90cA==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-app
+  namespace: totp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-app
+  template:
+    metadata:
+      labels:
+        app: spring-app
+    spec:
+      containers:
+      - name: spring-app
+        image: gjorginechovski/spring-app:latest
+        env:
+        - name: SPRING_EMAIL_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: spring-config
+              key: SPRING_EMAIL_USERNAME
+        - name: SPRING_EMAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: spring-secret
+              key: SPRING_EMAIL_PASSWORD
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/totp
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        - name: SPRING_PROFILES_ACTIVE
+          value: "http"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-app
+  namespace: totp
+spec:
+  selector:
+    app: spring-app
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-ingress
+  namespace: totp
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    traefik.ingress.kubernetes.io/ssl-passthrough: "false"
+    traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
+spec:
+  ingressClassName: traefik
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: spring-app
+            port:
+              number: 8080
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: totp
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        - name: POSTGRES_DB
+          value: totp
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: totp
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
