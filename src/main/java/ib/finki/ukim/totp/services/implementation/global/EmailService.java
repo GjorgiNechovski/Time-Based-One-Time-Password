@@ -19,6 +19,7 @@ public class EmailService implements IEmailService {
         this.emailSender = emailSender;
     }
 
+
     @SneakyThrows
     @Override
     public void sendRegistrationEmail(String email, String token) {
